@@ -8,6 +8,9 @@ $iSCSINicName2 = "iSCSI2"
 ## No need to change these variables
 $productionTeamName = "Production"
 $productionvSwitchName = "Production_vSwitch"
+$liveMigrationVlan=200
+$csvVlan=300
+$heartbeatVlan=400
 $iSCSI01vSwitchName = "iSCSI-01_vSwitch"
 $iSCSI02vSwitchName = "iSCSI-02_vSwitch"
 
@@ -42,6 +45,19 @@ Add-VMNetworkAdapter -Name "iSCSI-MR-01" -ManagementOS -SwitchName "$iSCSI01vSwi
 Add-VMNetworkAdapter -Name "iSCSI-FE-02" -ManagementOS -SwitchName "$iSCSI02vSwitchName"
 Add-VMNetworkAdapter -Name "iSCSI-MR-02" -ManagementOS -SwitchName "$iSCSI02vSwitchName"
 
+
+### Assign VLANs to the cross connected port, to segregate networks (VLANs are chosen "at will")
+## Networks on Cluster Switch
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "Heartbeat" -vlanid $heartbeatVlan -access
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "CSV" -vlanid $csvVlan -access
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "LiveMigration" -vlanid $liveMigrationVlan -access
+## Networks on iSCSI 01 - direct connected - VLAN IDs chosen randomly
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "iSCSI-FE-01" -vlanid 201 -access
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "iSCSI-MR-01" -vlanid 101 –access
+
+## Networks on iSCSI 02 - direct connected - VLAN IDs chosen randomly
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "iSCSI-FE-02" -vlanid 202 -access
+#Set-VMNetworkAdapterVlan -ManagementOS -VMNetworkAdapterName "iSCSI-MR-02" -vlanid 102 -access
 
 
 ### Assign the bandwidth settings
